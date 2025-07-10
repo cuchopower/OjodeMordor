@@ -1,0 +1,4 @@
+requests
+yfinance
+pytz
+python-telegram-bot
