@@ -14,8 +14,8 @@ DRIVE_FILE_ID = "1ktZ415nIiB-vfk0VCqrzNuTnsBAlbEzz"
 DRIVE_URL     = f"https://drive.google.com/uc?export=download&id={DRIVE_FILE_ID}"
 
 # Telegram: reemplaza con tu token y chat_id
-TELEGRAM_TOKEN   = "TU_TELEGRAM_TOKEN"
-TELEGRAM_CHAT_ID = "TU_TELEGRAM_CHAT_ID"
+TELEGRAM_TOKEN = '7666801859:AAFPwyWI_gPtqJO9CxJzUHyi1hu9eEQAj-c'
+TELEGRAM_CHAT_ID = '7361418502'
 
 # Zona horaria
 TZ_LOCAL = "America/Lima"
