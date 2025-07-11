@@ -18,7 +18,7 @@ TELEGRAM_CHAT_ID = '7361418502'
 # 📬 Función para enviar alertas a Telegram
 def enviar_telegram(mensaje):
     url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
-    payload = {"chat_id": CHAT_ID, "text": mensaje}
+    payload = {"chat_id": TELEGRAM_CHAT_ID, "text": mensaje}
     try:
         requests.post(url, data=payload)
     except Exception as e:
