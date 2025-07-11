@@ -10,7 +10,7 @@ import yfinance as yf
 # ————————— CONFIGURACIÓN —————————
 
 # ID del JSON de activos en Google Drive para “cucho”
-DRIVE_FILE_ID = "1ktZ415nIiB-vfk0VCqrzNuTnsBAlbEzz"
+DRIVE_FILE_ID = "1-N5YQIburpJFO3uT_mqZj3_SVze3uWG9"
 DRIVE_URL     = f"https://drive.google.com/uc?export=download&id={DRIVE_FILE_ID}"
 
 # Telegram: reemplaza con tu token y chat_id
