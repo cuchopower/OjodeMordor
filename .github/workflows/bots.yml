@@ -9,6 +9,9 @@ jobs:
   cucho:
     name: Bot CUCHO
     runs-on: ubuntu-latest
+    env:
+      TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+      CHAT_ID: ${{ secrets.CHAT_ID }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
@@ -22,6 +25,9 @@ jobs:
   poke:
     name: Bot POKE
     runs-on: ubuntu-latest
+    env:
+      TELEGRAM_TOKEN: ${{ secrets.TELEGRAM_TOKEN }}
+      CHAT_ID: ${{ secrets.CHAT_ID }}
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
