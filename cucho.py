@@ -3,6 +3,7 @@ import requests
 import yfinance as yf
 from datetime import datetime
 from pytz import timezone
+import os
 
 # 🕒 Zona horaria local
 TZ_LOCAL = "America/Lima"
@@ -11,11 +12,11 @@ TZ_LOCAL = "America/Lima"
 DRIVE_FILE_ID = "1-N5YQIburpJFO3uT_mqZj3_SVze3uWG9"
 DRIVE_URL = f"https://drive.google.com/uc?export=download&id={DRIVE_FILE_ID}"
 
-# 📬 Configuración de Telegram
-TELEGRAM_TOKEN = '7666801859:AAFPwyWI_gPtqJO9CxJzUHyi1hu9eEQAj-c'
-TELEGRAM_CHAT_ID = '7361418502'
+# 📬 Telegram desde secretos
+TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
+TELEGRAM_CHAT_ID = os.getenv("CHAT_ID")
 
-# 📬 Función para enviar alertas a Telegram
+# 📬 Envío de alertas a Telegram
 def enviar_telegram(mensaje):
     url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
     payload = {"chat_id": TELEGRAM_CHAT_ID, "text": mensaje}
@@ -24,7 +25,7 @@ def enviar_telegram(mensaje):
     except Exception as e:
         print(f"❌ Error enviando a Telegram: {e}")
 
-# 📂 Cargar activos desde Google Drive
+# 📂 Cargar activos desde Drive
 def cargar_activos_remotos():
     try:
         r = requests.get(DRIVE_URL)
@@ -50,12 +51,10 @@ def evaluar_alertas(activos):
             precio_actual = data["Close"].iloc[-1]
             señales = []
 
-            # 🎯 Señal por target_price
             target = activo.get("target_price")
             if target and precio_actual <= target:
                 señales.append(f"🎯 {symbol} llegó a ${precio_actual:.2f} (target: ${target})")
 
-            # 📉 Señal por caída porcentual
             ref = activo.get("reference_price")
             drop_pct = activo.get("drop_threshold_pct")
             if ref and drop_pct:
