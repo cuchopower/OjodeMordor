@@ -1,0 +1,33 @@
+name: Ejecutar bots CUCHO y POKE
+
+on:
+  schedule:
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
+
+jobs:
+  cucho:
+    name: Bot CUCHO
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          python cucho.py
+
+  poke:
+    name: Bot POKE
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          python poke.py
