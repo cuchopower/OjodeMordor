@@ -8,13 +8,16 @@ import os
 # 🕒 Zona horaria local
 TZ_LOCAL = "America/Lima"
 
-# 🔗 Archivo de activos en Google Drive (POKE)
-DRIVE_FILE_ID = "1U_wdqz5cLPTz03ycAsJDL_s9O7TvQoOd"
+# 🔗 Archivo de activos en Google Drive
+DRIVE_FILE_ID = "1-N5YQIburpJFO3uT_mqZj3_SVze3uWG9"
 DRIVE_URL = f"https://drive.google.com/uc?export=download&id={DRIVE_FILE_ID}"
 
 # 📬 Telegram desde secretos
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
 TELEGRAM_CHAT_ID = os.getenv("CHAT_ID")
+
+# 💾 Historial de señales enviadas por ciclo
+historial_señales = set()
 
 # 📬 Envío de alertas a Telegram
 def enviar_telegram(mensaje):
@@ -38,6 +41,8 @@ def cargar_activos_remotos():
 # 🔍 Evaluar condiciones de alerta
 def evaluar_alertas(activos):
     ahora = datetime.now(timezone(TZ_LOCAL))
+    hora_clave = ahora.strftime('%Y-%m')  # Trunca a bloque de 1 hora
+
     print(f"📡 Evaluando [POKE]: {ahora.strftime('%Y-%m-%d %H:%M:%S')}")
 
     for activo in activos:
@@ -53,16 +58,21 @@ def evaluar_alertas(activos):
 
             target = activo.get("target_price")
             if target and precio_actual <= target:
-                señales.append(f"🎯 {symbol} llegó a ${precio_actual:.2f} (target: ${target})")
+                clave = f"{symbol}-🎯-{hora_clave}"
+                if clave not in historial_señales:
+                    señales.append((clave, f"🎯 {symbol} llegó a ${precio_actual:.2f} (target: ${target})"))
 
             ref = activo.get("reference_price")
             drop_pct = activo.get("drop_threshold_pct")
             if ref and drop_pct:
                 caida = ((ref - precio_actual) / ref) * 100
                 if caida >= drop_pct:
-                    señales.append(f"📉 {symbol} cayó {caida:.2f}% desde ${ref} (ahora ${precio_actual:.2f})")
+                    clave = f"{symbol}-📉-{hora_clave}"
+                    if clave not in historial_señales:
+                        señales.append((clave, f"📉 {symbol} cayó {caida:.2f}% desde ${ref} (ahora ${precio_actual:.2f})"))
 
-            for señal in señales:
+            for clave, señal in señales:
+                historial_señales.add(clave)
                 print(señal)
                 mensaje = f"[POKE] {señal} – {ahora.strftime('%H:%M %Z')}"
                 enviar_telegram(mensaje)
